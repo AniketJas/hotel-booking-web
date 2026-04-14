@@ -1,5 +1,3 @@
-import React from "react";
-
 export default function Perks({ selected, onChange }) {
   function handleCbClick(e) {
     // console.log(e.target.checked);

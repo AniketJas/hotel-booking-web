@@ -1,4 +1,3 @@
-import React from "react";
 import { differenceInCalendarDays, format } from "date-fns";
 
 export default function BookingDates({ booking, className = null }) {

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import Perks from "../PerksLabel";
 import PhotosUploader from "../PhotosUploader";
@@ -27,6 +27,7 @@ export default function PlacesFormPage() {
     } else {
       axios.get("/places/" + id).then((response) => {
         const { data } = response;
+        console.log(data);
         setTitle(data.title);
         setAddress(data.address);
         setAddedPhotos(data.photos);
@@ -73,11 +74,11 @@ export default function PlacesFormPage() {
       maxGuests,
       price,
     };
+
+    console.log(placeData.addedPhotos);
     if (id) {
-      //update
       await axios.put("/places", { id, ...placeData });
     } else {
-      //new
       await axios.post("/places", placeData);
     }
     setRedirect(true);

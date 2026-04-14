@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import AccountNav from "../AccountNav";
 import axios from "axios";
@@ -9,6 +9,7 @@ export default function PlacesPage() {
 
   useEffect(() => {
     axios.get("/user-places").then(({ data }) => {
+      console.log(data);
       setPlaces(data);
     });
   }, []);
@@ -43,11 +44,12 @@ export default function PlacesPage() {
         {places.length > 0 &&
           places.map((place) => (
             <Link
+              key={place._id}
               to={"/account/places/" + place._id}
-              className="flex cursor-pointer bg-gray-100 p-4 rounded-xl gap-4"
+              className="flex cursor-pointer bg-gray-100 p-4 rounded-xl gap-4 mb-2"
             >
-              <div className=" flex w-32 h-32 grow shrink-0">
-                <PlaceImg place={place} />
+              <div className=" flex w-32 h-32 shrink-0">
+                <PlaceImg place={place} className={"rounded-xl"} />
               </div>
               <div className="grow-0 shrink">
                 <h2 className="text-xl text-bold">{place.title}</h2>

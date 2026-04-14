@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import BookingWidget from "../BookingWidget";
 import PlaceGallery from "../PlaceGallery";
@@ -15,7 +15,6 @@ export default function PlacePage() {
     }
     axios.get("/places/" + id).then((res) => {
       setPlace(res.data);
-      // console.log(res.data);
     });
   }, [id]);
 
