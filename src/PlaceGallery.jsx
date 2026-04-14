@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
 export default function PlaceGallery({ place }) {
   const [showAllPhotos, setShowAllPhotos] = useState(false);
@@ -35,7 +35,7 @@ export default function PlaceGallery({ place }) {
               <div>
                 <img
                   onClick={() => setShowAllPhotos(true)}
-                  src={"http://localhost:4000/uploads/" + photo}
+                  src={photo?.url}
                 />
               </div>
             ))}
@@ -52,8 +52,8 @@ export default function PlaceGallery({ place }) {
             <img
               onClick={() => setShowAllPhotos(true)}
               className="cursor-pointer object-cover aspect-square"
-              src={"http://localhost:4000/uploads/" + place.photos[0]}
-              alt=""
+              src={place.photos[0]?.url}
+              alt={place.title}
             />
           )}
         </div>
@@ -62,8 +62,8 @@ export default function PlaceGallery({ place }) {
             <img
               onClick={() => setShowAllPhotos(true)}
               className="cursor-pointer object-cover aspect-square"
-              src={"http://localhost:4000/uploads/" + place.photos[1]}
-              alt=""
+              src={place.photos[1]?.url}
+              alt={place.title}
             />
           )}
           {place.photos?.[2] && (
@@ -71,8 +71,8 @@ export default function PlaceGallery({ place }) {
               <img
                 onClick={() => setShowAllPhotos(true)}
                 className="object-cover aspect-square relative top-2"
-                src={"http://localhost:4000/uploads/" + place.photos[2]}
-                alt=""
+                src={place.photos[2]?.url}
+                alt={place.title}
               />
             </div>
           )}
@@ -82,17 +82,17 @@ export default function PlaceGallery({ place }) {
             <img
               onClick={() => setShowAllPhotos(true)}
               className="cursor-pointer object-cover aspect-square"
-              src={"http://localhost:4000/uploads/" + place.photos[3]}
-              alt=""
+              src={place.photos[3]?.url}
+              alt={place.title}
             />
           )}
-          {place.photos?.[3] && (
+          {place.photos?.[4] && (
             <div className="overflow-hidden">
               <img
                 onClick={() => setShowAllPhotos(true)}
                 className="object-cover aspect-square relative top-2"
-                src={"http://localhost:4000/uploads/" + place.photos[4]}
-                alt=""
+                src={place.photos[4]?.url}
+                alt={place.title}
               />
             </div>
           )}

@@ -27,7 +27,6 @@ export default function PlacesFormPage() {
     } else {
       axios.get("/places/" + id).then((response) => {
         const { data } = response;
-        console.log(data);
         setTitle(data.title);
         setAddress(data.address);
         setAddedPhotos(data.photos);
@@ -74,8 +73,6 @@ export default function PlacesFormPage() {
       maxGuests,
       price,
     };
-
-    console.log(placeData.addedPhotos);
     if (id) {
       await axios.put("/places", { id, ...placeData });
     } else {

@@ -1,19 +1,24 @@
-import React from "react";
-
-export default function PlaceImg({ place, index = 0, className = null }) {
-  if (!place.photos?.length) {
-    return "";
+export default function PlaceImg({ place, index = 0, className }) {
+  if (!place?.photos?.length) {
+    return null;
   }
 
-  if (!className) {
-    className = "object-cover";
+  const photo = place.photos[index];
+
+  if (!photo?.url) {
+    return null;
   }
+
+  const optimizedUrl = photo.url.replace(
+    "/upload/",
+    "/upload/w_800,q_auto,f_auto/"
+  );
 
   return (
     <img
-      src={"http://localhost:4000/uploads/" + place.photos[index]}
-      alt={place.photos[0]}
-      className={className}
+      src={optimizedUrl}
+      alt={place.title}
+      className={className || "object-cover"}
     />
   );
 }
