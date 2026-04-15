@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 import { Link, Navigate } from "react-router-dom";
 import axios from "axios";
 import { UserContext } from "../UserContext";
+import toast from "react-hot-toast";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -13,15 +14,15 @@ export default function LoginPage() {
     e.preventDefault();
 
     try {
-      const { data } = await axios.post("/login", {
+      const { data } = await axios.post("/users/login", {
         email,
         password,
       });
       setUser(data);
-      alert("Login successful.");
+      toast.success("Login successful.");
       setRedirect(true);
     } catch (e) {
-      alert("Login failed.");
+      toast.error("Login failed. Please check your credentials and try again.");
     }
   }
 
@@ -48,7 +49,7 @@ export default function LoginPage() {
           />
           <button className="primary">Login</button>
           <div className="text-center py-2">
-            Don't have an account yet?{" "}
+            Don&apos;t have an account yet?{" "}
             <Link to={"/register"} className="underline text-black">
               Register here
             </Link>

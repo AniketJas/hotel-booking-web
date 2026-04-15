@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useState } from "react";
+import toast from "react-hot-toast";
 import { Link, Navigate } from "react-router-dom";
 
 export default function RegisterPage() {
@@ -12,16 +13,16 @@ export default function RegisterPage() {
     e.preventDefault();
     try {
       await axios
-        .post("/register", {
+        .post("/users/register", {
           name,
           email,
           password,
         })
         .then((res) => console.log(res.data));
       setRedirect(true);
-      alert("Registration successful. Now you can log in");
+      toast.success("Registration successful. Now you can log in");
     } catch (e) {
-      alert("Registration failed. Please try again later");
+      toast.error("Registration failed. Please try again later");
     }
   }
 

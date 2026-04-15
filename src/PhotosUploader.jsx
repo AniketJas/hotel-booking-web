@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 export default function PhotosUploader({ addedPhotos, onChange }) {
   const [photoLink, setPhotoLink] = useState("");
@@ -15,8 +16,14 @@ export default function PhotosUploader({ addedPhotos, onChange }) {
     }
 
     try {
-      const res = await axios.post("/upload", data, {
+      const promise = axios.post("/upload", data, {
         headers: { "Content-Type": "multipart/form-data" },
+      });
+
+      const res = await toast.promise(promise, {
+        loading: `Uploading ${files.length} photo(s)...`,
+        success: `${files.length} photo(s) uploaded`,
+        error: "Upload failed",
       });
 
       onChange((prev) => [...prev, ...res.data]);
@@ -30,8 +37,14 @@ export default function PhotosUploader({ addedPhotos, onChange }) {
     e.preventDefault();
 
     try {
-      const res = await axios.post("/upload-by-link", {
+      const promise = axios.post("/upload/by-link", {
         link: photoLink,
+      });
+
+      const res = await toast.promise(promise, {
+        loading: "Adding photo...",
+        success: "Photo added",
+        error: "Failed to add photo",
       });
 
       onChange((prev) => [...prev, res.data]);
@@ -45,10 +58,14 @@ export default function PhotosUploader({ addedPhotos, onChange }) {
     e.preventDefault();
 
     try {
-      console.log(photo.public_id); // verify
-
-      await axios.delete("/delete-photo", {
+      const promise = axios.delete("/upload/delete", {
         data: { public_id: photo.public_id },
+      });
+
+      await toast.promise(promise, {
+        loading: "Deleting photo...",
+        success: "Photo deleted successfully",
+        error: "Failed to delete photo",
       });
 
       onChange((prev) =>
@@ -103,7 +120,7 @@ export default function PhotosUploader({ addedPhotos, onChange }) {
               key={photo.public_id}
             >
               <img
-                src={optimizedUrl}
+                src={photo.url}
                 className="rounded-2xl w-full object-cover"
                 alt="Stay image"
               />

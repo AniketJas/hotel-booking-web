@@ -4,13 +4,15 @@ import { Navigate, useParams } from "react-router-dom";
 import axios from "axios";
 import PlacesPage from "./PlacesPage";
 import AccountNav from "../AccountNav";
+import toast from "react-hot-toast";
 
 export default function ProfilePage() {
   const [redirect, setRedirect] = useState(null);
   const { ready, user, setUser } = useContext(UserContext);
 
   async function logout() {
-    await axios.post("/logout");
+    await axios.post("/users/logout");
+    toast.success("You have been logged out.");
     setRedirect("/");
     setUser(null);
   }
