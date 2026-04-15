@@ -10,13 +10,21 @@ export default function BookingWidget({ place }) {
   const [noOfGuests, setNoOfGuests] = useState(1);
 
   const [name, setName] = useState("");
-  //   const [email, setEmail] = useState("");
   const [phno, setPhno] = useState("");
   const [redirect, setRedirect] = useState(false);
 
   const [bookingId, setBookingId] = useState("");
 
+  const [errors, setErrors] = useState({});
+
   const { user } = useContext(UserContext);
+
+  const today = new Date();
+  const localDate = new Date(
+    today.getTime() - today.getTimezoneOffset() * 60000
+  )
+    .toISOString()
+    .split("T")[0];
 
   let noOfNights = 0;
 
@@ -33,8 +41,37 @@ export default function BookingWidget({ place }) {
     );
   }
 
+  function validate() {
+    const newErrors = {};
+    console.log(place);
+
+    if (!checkIn) newErrors.checkIn = "Check-in required";
+    if (!checkOut) newErrors.checkOut = "Check-out required";
+
+    if (checkIn && checkOut && noOfNights <= 0) {
+      newErrors.checkOut = "Must be after check-in";
+    }
+
+    if (!noOfGuests || noOfGuests < 1) {
+      newErrors.noOfGuests = "Minimum 1 guest required";
+    }
+    if (noOfGuests > place?.maxGuests) {
+      newErrors.noOfGuests = `Maximum ${place?.maxGuests} guests allowed`;
+    }
+
+    if (noOfNights > 0) {
+      if (!name) newErrors.name = "Name required";
+      if (!phno) newErrors.phno = "Phone required";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  }
+
   async function bookThisPlace() {
+    if (!validate()) return;
     const totalPrice = noOfNights * place.price;
+
     const bookindData = {
       place: place._id,
       checkIn,
@@ -57,7 +94,7 @@ export default function BookingWidget({ place }) {
   return (
     <div className="bg-gray-100 shadow p-4 rounded-2xl ">
       <div className="text-2xl text-center mb-4">
-        Price: ₹{place.price}/per night
+        Price: <span className="font-semibold">₹{place.price}</span>/per night
       </div>
 
       <div className="border border-gray-300 rounded-2xl">
@@ -67,16 +104,34 @@ export default function BookingWidget({ place }) {
             <input
               type="date"
               value={checkIn}
-              onChange={(e) => setCheckIn(e.target.value)}
+              min={localDate}
+              onChange={(e) => {
+                setCheckIn(e.target.value);
+                setErrors((prev) => ({ ...prev, checkIn: "" }));
+              }}
+              className={`border rounded-2xl px-3 py-2 w-full ${errors.checkIn ? "border-red-500" : ""
+                }`}
             />
+            {errors.checkIn && (
+              <p className="text-red-500 text-sm mt-0.5 ml-1">{errors.checkIn}</p>
+            )}
           </div>
           <div className=" p-3 border-l ">
             <label>Check Out: </label>
             <input
               type="date"
               value={checkOut}
-              onChange={(e) => setCheckOut(e.target.value)}
+              min={checkIn || localDate}
+              onChange={(e) => {
+                setCheckOut(e.target.value);
+                setErrors((prev) => ({ ...prev, checkOut: "" }));
+              }}
+              className={`border rounded-2xl px-3 py-2 w-full ${errors.checkOut ? "border-red-500" : ""
+                }`}
             />
+            {errors.checkOut && (
+              <p className="text-red-500 text-sm mt-0.5 ml-1">{errors.checkOut}</p>
+            )}
           </div>
         </div>
 
@@ -85,8 +140,16 @@ export default function BookingWidget({ place }) {
           <input
             type="number"
             value={noOfGuests}
-            onChange={(e) => setNoOfGuests(e.target.value)}
+            onChange={(e) => {
+              setNoOfGuests(e.target.value);
+              setErrors((prev) => ({ ...prev, noOfGuests: "" }));
+            }}
+            className={`border rounded px-2 ${errors.noOfGuests ? "border-red-500" : ""
+              }`}
           />
+          {errors.noOfGuests && (
+            <p className="text-red-500 text-sm mt-0.5 ml-1">{errors.noOfGuests}</p>
+          )}
         </div>
         {noOfNights > 0 && (
           <div className=" p-3 border-t">
@@ -94,14 +157,30 @@ export default function BookingWidget({ place }) {
             <input
               type="text"
               value={name}
-              onChange={(e) => setName(e.target.value)}
+              onChange={(e) => {
+                setName(e.target.value);
+                setErrors((prev) => ({ ...prev, name: "" }));
+              }}
+              className={`${errors.name ? "border-red-500 border" : ""}`}
             />
+            {errors.name && (
+              <p className="text-red-500 text-sm mt-0.5 ml-1">{errors.name}</p>
+            )}
+
             <label>Your phone number: </label>
             <input
               type="tel"
               value={phno}
-              onChange={(e) => setPhno(e.target.value)}
+              onChange={(e) => {
+                setPhno(e.target.value);
+                setErrors((prev) => ({ ...prev, phno: "" }));
+              }}
+              className={`${errors.phno ? "border-red-500 border" : ""}`}
             />
+            {errors.phno && (
+              <p className="text-red-500 text-sm mt-0.5 ml-1">{errors.phno}</p>
+            )}
+
           </div>
         )}
       </div>
