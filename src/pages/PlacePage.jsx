@@ -9,6 +9,18 @@ export default function PlacePage() {
   const { id } = useParams();
   const [place, setPlace] = useState({});
 
+  function formatTime12h(time) {
+    if (!time) return "";
+
+    const [hour, minute] = time.split(":");
+    let h = parseInt(hour, 10);
+
+    const ampm = h >= 12 ? "PM" : "AM";
+    h = h % 12 || 12; // convert 0 → 12
+
+    return `${h}:${minute} ${ampm}`;
+  }
+
   useEffect(() => {
     if (!id) {
       return;
@@ -20,7 +32,6 @@ export default function PlacePage() {
 
   return (
     <div className="mt-4 pt-8 bg-gray-200 -mx-8 px-8">
-      {/* <h1>{id}</h1> */}
       <h1 className="text-2xl mr-48">{place.title}</h1>
       <AddressLink>{place.address}</AddressLink>
       <PlaceGallery place={place} />
@@ -30,9 +41,9 @@ export default function PlacePage() {
             <h2 className="font-semibold text-2xl">Description</h2>
             {place.description}
           </div>
-          Check-In: {place.checkIn}:00 hrs
+          Check-In: {formatTime12h(place.checkIn)}
           <br />
-          Check-out: {place.checkOut}:00 hrs
+          Check-out: {formatTime12h(place.checkOut)}
           <br />
           Max number of guests: {place.maxGuests}
         </div>
