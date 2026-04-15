@@ -1,15 +1,24 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import Loader from "../component/Loader";
 
 export default function IndexPage() {
   const [places, setPlaces] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     axios.get("/places").then((response) => {
       setPlaces(response.data);
+      setLoading(false);
     });
   }, []);
+
+  if (loading) {
+    return (
+      <Loader />
+    );
+  }
 
   return (
     <div className="mt-8 grid gap-x-6 gap-y-8 grid-cols-2 md:grid-cols-3 lg:grid-cols-4">

@@ -5,6 +5,7 @@ import axios from "axios";
 import PlacesPage from "./PlacesPage";
 import AccountNav from "../AccountNav";
 import toast from "react-hot-toast";
+import Loader from "../component/Loader";
 
 export default function ProfilePage() {
   const [redirect, setRedirect] = useState(null);
@@ -24,7 +25,7 @@ export default function ProfilePage() {
   }
 
   if (!ready) {
-    return "Loading ...";
+    return <Loader />;
   }
 
   if (ready && !user && !redirect) {
