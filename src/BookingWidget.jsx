@@ -185,9 +185,13 @@ export default function BookingWidget({ place }) {
         )}
       </div>
 
-      <button className="primary mt-4" onClick={bookThisPlace}>
-        Book this place
-        {noOfNights > 0 && <span> ₹{noOfNights * place.price}</span>}
+      <button
+        className={`primary mt-4 ${!user ? "opacity-50 cursor-not-allowed" : ""}`}
+        onClick={bookThisPlace}
+        disabled={!user}
+      >
+        {user ? "Book this place" : "Login to book"}
+        {noOfNights > 0 && user && <span> ₹{noOfNights * place.price}</span>}
       </button>
     </div>
   );
