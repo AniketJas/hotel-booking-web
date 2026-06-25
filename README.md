@@ -1,4 +1,4 @@
-# Hotel Booking Website - Client
+# Stayzy - Hotel Booking Website - Client
 
 A modern hotel booking web application built with React, Vite, and Tailwind CSS. This is the frontend client for the full-stack MERN hotel booking platform.
 
